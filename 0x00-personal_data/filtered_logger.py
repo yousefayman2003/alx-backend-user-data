@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
 """Module of filtered Logger"""
-import re
 from typing import List
+import re
 import logging
-import mysql.connector
 import os
-
-
-from typing import List
-import re
-import logging
-from os import environ
 import mysql.connector
 
 
@@ -41,16 +34,13 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Returns a connector to a MySQL database """
-    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = environ.get("PERSONAL_DATA_DB_NAME")
-
-    cnx = mysql.connector.connection.MySQLConnection(user=username,
-                                                     password=password,
-                                                     host=host,
-                                                     database=db_name)
-    return cnx
+    db_connect = mysql.connector.connect(
+        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+        host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+    return db_connect
 
 
 def main():
